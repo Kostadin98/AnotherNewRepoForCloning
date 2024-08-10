@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
+    <div th:replace="~{fragments/newHeader}"></div>
+
     <meta charset="UTF-8">
     <title th:text="#{contact.form.title}">Contact Form</title>
     <!-- Bootstrap CSS -->
@@ -9,165 +12,50 @@
         body {
             background: url('/images/themes/img.png') no-repeat center center fixed;
             background-size: cover;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .header {
-            background: transparent; /* Fully transparent background */
-            color: #343a40; /* Dark text color for contrast */
-            padding: 15px 30px; /* Adjusted padding for spacing */
-            display: flex;
-            justify-content: flex-end; /* Align to the right */
-            align-items: center;
-            box-shadow: none; /* No shadow to maintain full transparency */
-            position: absolute; /* Absolute positioning */
-            top: 0;
-            right: 0;
-            width: 100%; /* Full width to the right */
-            max-width: 300px; /* Adjust the width as needed */
-        }
-
-        .language-switcher {
-            margin: 0;
-            display: flex;
-            gap: 15px; /* Space between language links */
-        }
-
-        .language-switcher a {
-            color: #fff; /* Blue color for text */
-            text-decoration: none;
-            font-size: 16px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-            font-weight: 500; /* Slightly bolder font for visibility */
-        }
-
-        .language-switcher a:hover {
-            background-color: rgba(0, 123, 255, 0.1); /* Light blue background on hover */
-            color: #fff; /* Darker blue text on hover */
-            text-decoration: none;
-        }
-
-        .language-switcher a.active {
-            background-color: rgba(0, 123, 255, 0.2); /* Light blue background for active link */
-            color: #fff; /* Darker blue text for active link */
-            text-decoration: none;
-        }
-
-        .contact-container {
-            max-width: 600px;
-            width: 100%;
-            padding: 2rem;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 0.75rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-            border: 1px solid #ddd;
-            margin: 3rem auto;
-            position: relative;
-        }
-
-        .contact-container h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: #333;
-            font-size: 2rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .contact-container label {
-            font-weight: 500;
-            color: #555;
-        }
-
-        .contact-container .form-control {
-            border-radius: 0.25rem;
-            border-color: #ced4da;
-            padding: 0.75rem;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .contact-container .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
-        }
-
-        .contact-container .btn-primary {
-            background-color: #17a2b8;
-            border-color: #17a2b8;
-            border-radius: 0.25rem;
-            font-size: 1.25rem;
-            font-weight: 500;
-            width: 100%;
-        }
-
-        .contact-container .btn-primary:hover {
-            background-color: #138496;
-            border-color: #117a8b;
-        }
-
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            font-weight: 500;
-            color: #fff;
-            background-color: #17a2b8;
-            border: none;
-            border-radius: 0.25rem;
-            text-decoration: none;
-        }
-
-        .back-btn:hover {
-            background-color: #138496;
-            color: #fff;
-            text-decoration: none;
         }
     </style>
 </head>
+
 <body>
-<div class="header">
-    <div class="language-switcher">
-        <a href="?lang=en" th:classappend="${#locale.language == 'en'} ? 'active'">English</a>
-        <a href="?lang=bg" th:classappend="${#locale.language == 'bg'} ? 'active'">Български</a>
+<div class="position-relative">
+
+    <!-- Back Button -->
+    <a th:href="@{/profile/{id}(id=${user.id})}" class="btn btn-info position-absolute" style="top: 20px; left: 20px;" th:text="#{contact.form.backToProfile}">Back to Profile</a>
+    <!-- Contact Form Container -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="bg-light p-4 rounded shadow-sm">
+                    <h2 class="text-center mb-4 text-dark font-weight-bold text-uppercase" th:text="#{contact.form.heading}">Message me here</h2>
+                    <form th:action="@{/profile/{id}/submitContactForm(id=${user.id})}" method="post">
+                        <div class="form-group">
+                            <label for="name" th:text="#{contact.form.senderName}">Your Name</label>
+                            <input type="text" id="name" name="senderName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" th:text="#{contact.form.senderEmail}">Your Email</label>
+                            <input type="email" id="email" name="senderEmail" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" th:text="#{contact.form.senderPhone}">Your Phone Number</label>
+                            <input type="tel" id="phone" name="senderPhone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" th:text="#{contact.form.content}">Your Message</label>
+                            <textarea id="message" name="content" class="form-control" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" th:text="#{contact.form.submit}">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<a th:href="@{/profile/{id}(id=${user.id})}" class="back-btn" th:text="#{contact.form.backToProfile}">Back to Profile</a>
-<div class="contact-container">
-    <h2 th:text="#{contact.form.heading}">Message me here</h2>
-    <form th:action="@{/profile/{id}/submitContactForm(id=${user.id})}" method="post">
-        <div class="form-group">
-            <label for="name" th:text="#{contact.form.senderName}">Your Name</label>
-            <input type="text" id="name" name="senderName" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="email" th:text="#{contact.form.senderEmail}">Your Email</label>
-            <input type="email" id="email" name="senderEmail" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="phone" th:text="#{contact.form.senderPhone}">Your Phone Number</label>
-            <input type="tel" id="phone" name="senderPhone" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="message" th:text="#{contact.form.content}">Your Message</label>
-            <textarea id="message" name="content" class="form-control" rows="5" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary" th:text="#{contact.form.submit}">Send Message</button>
-    </form>
-</div>
+
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
