@@ -1,0 +1,44 @@
+spring:
+  resources:
+    static-locations: classpath:/static/
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cloning?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: ${db_username}
+    password: ${db_password}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: never
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  messages:
+    basename: messages
+    encoding: UTF-8
+
+
+  default.admin.pass: 'topsecret'
+  remember.me.key: 'topsecret'
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+
+             #Good practice
+#file:
+#  upload:
+#    dir:
+#      base: ./images
+#      avatars: ./images/avatars
+#      qr-codes: ./images/qr-codes

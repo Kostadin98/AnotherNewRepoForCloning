@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Footer</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <style>
+    .footer {
+        background-color: #0066b2;
+        color: #ffffff;
+        padding: 0.5rem 0;
+    }
+    .footer .footer-links a {
+        color: #ffffff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    .footer .footer-links a:hover {
+        color: #ffffff;
+    }
+    .footer .social-icons a {
+        color: #ffffff;
+        margin: 0 0.5rem;
+        font-size: 1.5rem;
+        transition: color 0.3s ease;
+    }
+    .footer .social-icons a:hover {
+        color: #ffffff;
+    }
+    .footer .footer-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) {
+        .footer .footer-section {
+            text-align: left;
+            align-items: flex-start;
+            margin-bottom: 0;
+        }
+        .footer .footer-links {
+            padding-left: 2rem;
+        }
+        .footer p{
+        color: #fff;
+        }
+    }
+  </style>
+</head>
+<body>
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <!-- Footer Navigation Links -->
+      <div class="col-md-4 footer-section footer-links">
+        <h5>Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a th:href="@{/}">Home</a></li>
+          <li><a th:href="@{/about}">About</a></li>
+        </ul>
+      </div>
+      <!-- Social Media Links -->
+      <div class="col-md-4 footer-section">
+        <h5>Follow Us</h5>
+        <div class="social-icons">
+          <a href="www.facebook.com"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="https://bg.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <!-- Contact Information -->
+      <div class="col-md-4 footer-section">
+        <h5>Contact Us</h5>
+        <p>
+          <i class="fas fa-map-marker-alt"></i> 1234 Street Name, City, Country <br>
+          <i class="fas fa-phone"></i> +1 234 567 890 <br>
+          <i class="fas fa-envelope"></i> email@example.com
+        </p>
+      </div>
+    </div>
+    <div class="text-center mt-3">
+      <p>&copy; 2024 Your Company. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

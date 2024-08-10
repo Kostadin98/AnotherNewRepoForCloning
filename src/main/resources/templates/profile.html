@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/images/themes/img.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            color: #333;
+            position: relative;
+        }
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .home-button:hover {
+            color: #fff;
+            text-decoration: none;
+            background-color: #0056b3;
+        }
+        .profile-container {
+            margin-top: 50px;
+        }
+
+        .profile-card {
+            position: relative;
+            padding: 40px;
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+        .profile-card .profile-view-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 5px 10px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .profile-card .profile-view-btn:hover {
+            background-color: #0056b3;
+        }
+        .profile-card .icon {
+            position: absolute;
+            top: 20px;
+            color: #007bff;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        .profile-card .icon.message {
+            right: 150px;
+        }
+        .profile-card .icon.settings {
+            right: 70px;
+        }
+        .profile-card .icon.gallery {
+            right: 110px;
+        }
+        .profile-card .avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #007bff;
+            margin-bottom: 20px;
+        }
+
+        .profile-card .email {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #495057;
+        }
+        .profile-card .description {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #6c757d;
+        }
+        .comment-section {
+            margin-top: 30px;
+        }
+        .comment-section h3 {
+            color: #fff;
+        }
+        .comment {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .comment .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+        .comment .comment-header strong {
+            font-size: 1.1rem;
+            color: #333;
+        }
+        .comment .comment-header .comment-date {
+            font-size: 0.9rem;
+            color: #999;
+        }
+        .comment .comment-content {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #666;
+        }
+        .comment-form.hidden {
+            display: none;
+        }
+
+        .comment-form label[for="commentContent"],
+        .comment-form label[for="commentAuthor"] {
+             color: #fff;
+        }
+        /* Description CSS style */
+        .description-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .description-container h3 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .description-container p {
+            font-size: 1rem;
+            color: #666;
+        }
+        .description-container .form-group {
+            margin-top: 20px;
+        }
+        .edit-description-form {
+            display: none;
+        }
+
+        .qr-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .qr-code {
+            width: 300px;
+            height: 300px;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .qr-code:hover {
+            transform: scale(1.1);
+        }
+        .upload-form {
+            display: none;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .download-btn {
+            margin-top: 20px;
+        }
+        .upload-new-avatar{
+        background-color: #007bff;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: none;
+        }
+        .upload-new-avatar:hover{
+         background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<!-- Home Button -->
+<a sec:authorize="isAuthenticated()" th:href="@{/home}" class="home-button">Home</a>
+<a sec:authorize="isAnonymous()" th:href="@{/}" class="home-button">Home</a>
+
+<div class="container profile-container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card profile-card text-center">
+
+                <a th:if="${isProfileOwner}"
+                   th:href="@{/profile/{id}/viewAsAnonymous(id=${user.id})}"
+                   target="_blank" class="profile-view-btn">Profile View</a>
+
+                <a th:if="${isProfileOwner}" th:href="@{/profile/{id}/settings(id=${user.id})}" class="icon settings">
+                    <i class="fas fa-cog"></i>
+                </a>
+                <a th:href="@{/profile/{id}/gallery(id=${user.id})}" class="icon gallery">
+                    <i class="fas fa-images"></i>
+                </a>
+                <a th:if="${isProfileOwner}" th:href="@{/profile/{id}/messages/inbox(id=${user.id})}"
+                   class="icon message">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a th:if="${!isProfileOwner}" th:href="@{/profile/{id}/contactForm(id=${user.id})}"
+                   class="icon message">
+                    <i class="fas fa-envelope"></i>
+                </a>
+
+                <img th:src="@{${user.avatarImage != null ? user.avatarImage.filePath : '/images/defaultAvatar/defaultAvatarImage.png'}}"
+                     alt="Avatar"
+                     class="avatar mx-auto d-block">
+
+                <button th:if="${isProfileOwner}" id="showUploadFormBtn" class="upload-new-avatar"
+                        onclick="toggleUploadForm()">Upload New Avatar</button>
+
+                <div class="upload-form mt-3" sec:authorize="isAuthenticated()">
+                    <form action="#" th:action="@{/profile/{id}/uploadAvatar(id=${user.id})}" method="post"
+                          enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="file">Upload Image</label>
+                            <input type="file" id="file" name="file" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+
+                <h2 class="mt-3" th:text="${user.fullName}">John Doe</h2>
+
+                <h3 class="mt-3" th:text="${user.companyName}">Company Name</h3>
+                <div class="email mt-4">
+                    <strong>Email:</strong> <span th:text="${user.email}">john.doe@example.com</span>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <!-- Description section -->
+                    <section class="description-container">
+                        <h3>Description</h3>
+                        <p th:text="${user.description}">User description goes here...</p>
+
+                        <!-- Update Description Form -->
+                        <div class="edit-description-form" th:if="${isProfileOwner}">
+                            <form th:action="@{/profile/{id}/updateDescription(id=${user.id})}" method="post">
+                                <div class="form-group">
+                                    <label for="description">Edit Description</label>
+                                    <textarea id="description" name="description" class="form-control" rows="3"
+                                              th:text="${user.description}"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Description</button>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-md-4 qr-container">
+                    <!-- QR Code visualization -->
+                    <img th:src="@{${user.qrCodePath != null ? user.qrCodePath : '/images/default-qr-codes/default-qr.png'}}"
+                         alt="QR Code"
+                         class="qr-code mx-auto d-block"
+                         onclick="showModal()">
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comment-section mt-5">
+                <h3>Comments</h3>
+                <div th:each="comment : ${comments}" class="comment">
+                    <div class="comment-header">
+                        <strong th:text="${comment.author}">Author</strong>
+                        <span class="comment-date" th:text="${comment.createdDate}">Date</span>
+                    </div>
+                    <div class="comment-content" th:text="${comment.content}">Comment content goes here...</div>
+                    <form th:action="@{/profile/{id}/deleteComment(id=${user.id})}" method="post"
+                          style="display:inline;">
+                        <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                        <button th:if="${isProfileOwner}" type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </div>
+
+                <!-- Comment Form -->
+                <div class="comment-form mt-4" th:if="${!isProfileOwner}">
+                    <form th:action="@{/profile/{id}/addComment(id=${user.id})}" method="post">
+                        <div class="form-group">
+                            <label for="commentContent">Your Comment</label>
+                            <textarea id="commentContent" name="content" class="form-control" rows="3"
+                                      required></textarea>
+                        </div>
+                        <div sec:authorize="isAnonymous()">
+                            <div class="form-group">
+                                <label for="commentAuthor">Your Name</label>
+                                <input type="text" id="commentAuthor" name="author" class="form-control">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for QR Code -->
+<div id="qrModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="hideModal()">&times;</span>
+        <img id="qrModalImage" src="" alt="QR Code" style="width: 100%; height: auto;">
+        <a id="downloadBtn" class="btn btn-primary download-btn" download>Download</a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function toggleUploadForm() {
+        var uploadForm = document.querySelector('.upload-form');
+        if (uploadForm.style.display === 'none' || uploadForm.style.display === '') {
+            uploadForm.style.display = 'block';
+        } else {
+            uploadForm.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var isProfileOwner = [[${isProfileOwner}]];  // Set this using Thymeleaf or inline script
+        var editDescriptionForm = document.querySelector('.edit-description-form');
+
+        if (isProfileOwner) {
+            editDescriptionForm.style.display = 'block';
+        }
+    });
+
+    function showModal() {
+        var modal = document.getElementById("qrModal");
+        var modalImg = document.getElementById("qrModalImage");
+        var qrCode = document.querySelector(".qr-code");
+        var downloadBtn = document.getElementById("downloadBtn");
+
+        modal.style.display = "block";
+        modalImg.src = qrCode.src;
+        downloadBtn.href = qrCode.src;
+        downloadBtn.download = "QRCode.png";  // Set a default filename for the download
+    }
+
+    function hideModal() {
+        var modal = document.getElementById("qrModal");
+        modal.style.display = "none";
+    }
+</script>
+
+</body>
+</html>

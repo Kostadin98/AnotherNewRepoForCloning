@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${user.email} + ' Home Page'">Home Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        .body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.jumbotron {
+    background: url('/images/themes/img.png') no-repeat center center;
+    background-size: cover;
+    color: white;
+    text-shadow: 2px 2px 4px #000;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+
+.btn-primary {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.container .row {
+    margin-top: 2rem;
+}
+
+.view-details-container {
+    margin-top: 3rem;
+}
+
+.view-details-container .icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2.25rem; /* Increase font size for icons */
+    color: #0066b2; /* Change icon color */
+    text-decoration: none;
+    transition: color 0.3s ease;
+    margin-bottom: 2rem; /* Increase spacing between items */
+    padding-right: 1.5rem; /* Add extra space on the right */
+}
+
+.view-details-container .icon:hover {
+    color: #004085;
+    transform: scale(1.1);
+}
+
+.view-details-container .icon i {
+    margin-bottom: 10px; /* Add space below the icon */
+    font-size: 2.75rem; /* Make the icons larger */
+}
+
+.view-details-container h2 {
+    font-size: 2rem; /* Increase font size for the title */
+    font-weight: bold; /* Make the title bold */
+    text-align: center; /* Center the heading */
+    margin-bottom: 1rem; /* Add space below the title */
+    color: #0056b3; /* Set a color for the title */
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.view-details-container p {
+    font-size: 1.15rem;
+}
+
+.view-details-container span {
+    font-size: 0.9rem; /* Smaller text for span elements */
+    color: #333; /* Optional: Adjust color if needed */
+    display: block; /* Ensure spans are block-level to center-align */
+}
+
+.view-details-container .description {
+    font-size: 0.75rem; /* Really small text */
+    color: #888; /* Pale color for description */
+    text-align: center; /* Center the description */
+    margin-top: 0.5rem; /* Space above the description */
+}
+
+/* Add a thin blue line above and below the feature rows */
+.feature-separator {
+    border-top: 1px solid #0066b2; /* Thin blue line */
+    margin: 2rem 0; /* Add space above and below the line */
+}
+
+    </style>
+</head>
+<body>
+
+<div>
+    <nav th:replace="~{fragments/navigation}"></nav>
+</div>
+
+<!-- Jumbotron -->
+<div class="jumbotron text-center">
+    <div class="container-fluid">
+        <h1>Welcome to Virtual Business Card!</h1>
+        <p>Effortlessly manage and share your professional details with our intuitive Virtual Business Card application.</p>
+        <p>Access your personalized profile to get started.</p>
+        <a class="btn btn-primary btn-lg" th:href="@{/profile/{id}(id=${user.id})}" role="button">Go to Profile</a>
+    </div>
+</div>
+
+<!-- View Details Section -->
+<div class="container view-details-container">
+    <h2 class="text-center mb-4">Quick Access</h2>
+    <!-- Thin blue line above the feature rows -->
+    <div class="feature-separator"></div>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <a th:href="@{/profile/{id}/settings(id=${user.id})}" class="icon settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+                <p class="description">Manage your account settings</p> <!-- Description -->
+            </a>
+            <a th:href="@{/profile/{id}/gallery(id=${user.id})}" class="icon gallery">
+                <i class="fas fa-images"></i>
+                <span>Gallery</span>
+                <p class="description">View your photo gallery</p> <!-- Description -->
+            </a>
+        </div>
+        <div class="col-md-6 mb-4">
+            <a th:href="@{/profile/{id}/messages/inbox(id=${user.id})}" class="icon message">
+                <i class="fas fa-envelope"></i>
+                <span>Inbox</span>
+                <p class="description">Check your messages</p> <!-- Description -->
+            </a>
+            <a th:href="@{/profile/{id}/manageCategories(id=${user.id})}" class="icon manageCategories">
+                <i class="fas fa-tags"></i>
+                <span>Manage Categories</span>
+                <p class="description">Organize your categories</p> <!-- Description -->
+            </a>
+        </div>
+    </div>
+    <!-- Thin blue line below the feature rows -->
+    <div class="feature-separator"></div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<div>
+    <nav th:replace="~{fragments/footer}"></nav>
+</div>
+
+</body>
+</html>

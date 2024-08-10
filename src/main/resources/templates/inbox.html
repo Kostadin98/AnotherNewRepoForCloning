@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inbox</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/images/themes/img.png') no-repeat center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: transparent; /* Fully transparent background */
+            color: #fff; /* White text color */
+            padding: 15px 30px; /* Adjusted padding for spacing */
+            display: flex;
+            justify-content: flex-end; /* Align to the right */
+            align-items: center;
+            box-shadow: none; /* No shadow to maintain full transparency */
+            position: absolute; /* Absolute positioning */
+            top: 0;
+            right: 0;
+            width: 100%; /* Full width to the right */
+            max-width: 300px; /* Adjust the width as needed */
+        }
+
+        .language-switcher {
+            margin: 0;
+            display: flex;
+            gap: 15px; /* Space between language links */
+        }
+
+        .language-switcher a {
+            color: #fff; /* White color for text */
+            text-decoration: none;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: 500; /* Slightly bolder font for visibility */
+        }
+
+        .language-switcher a:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* Light gray background on hover */
+            color: #fff; /* White text on hover */
+            text-decoration: none;
+        }
+
+        .language-switcher a.active {
+            background-color: rgba(255, 255, 255, 0.2); /* Light gray background for active link */
+            color: #fff; /* White text for active link */
+            text-decoration: none;
+        }
+
+        .exactClassName {
+            color: #fff; /* White text color for contrast against dark background */
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* Soft shadow for better readability */
+            font-size: 3rem; /* Large font size for emphasis */
+            font-weight: 700; /* Bold text */
+            letter-spacing: 2px; /* Spaced-out letters for a clean look */
+            text-transform: uppercase; /* Uppercase text for a bold statement */
+            background: linear-gradient(135deg, #007bff, #00d2ff); /* Gradient background for dynamic color effect */
+            -webkit-background-clip: text; /* Clips the gradient to the text */
+            background-clip: text; /* Clips the gradient to the text */
+            display: inline-block; /* Ensures the gradient effect only applies to the text */
+            position: relative; /* Allows positioning of pseudo-elements */
+            padding-bottom: 10px; /* Space below the text for underline effect */
+        }
+
+        .container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .message-card {
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            border: 1px solid #ddd;
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .message-card h5 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .message-card p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .message-card .message-details {
+            margin-bottom: 10px;
+        }
+
+        .message-content-container {
+            background-color: #f1f1f1;
+            padding: 45px;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            margin-top: 10px;
+        }
+
+        .message-content {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="language-switcher">
+        <a href="?lang=en" th:classappend="${#locale.language == 'en'} ? 'active'">English</a>
+        <a href="?lang=bg" th:classappend="${#locale.language == 'bg'} ? 'active'">Български</a>
+    </div>
+</div>
+<a th:href="@{/profile/{id}(id=${user.id})}" class="back-btn">Back to Profile</a>
+<div class="container mt-5">
+    <h2 class="exactClassName">Inbox</h2>
+    <div th:each="message : ${messages}" class="message-card">
+        <h5 th:text="${message.senderName}">Sender Name</h5>
+        <p class="message-details"><strong>Email:</strong> <span th:text="${message.senderEmail}">sender@example.com</span></p>
+        <p class="message-details"><strong>Phone:</strong> <span th:text="${message.senderPhone}">123-456-7890</span></p>
+        <p class="message-details"><strong>Date:</strong> <span th:text="${message.formattedDate}">01/01/2023</span></p>
+        <p class="message-details"><strong>Message:</strong></p>
+        <div class="message-content-container">
+            <div class="message-content">
+                <span th:text="${message.content}">Message content goes here...</span>
+            </div>
+        </div>
+        <form th:action="@{/profile/{id}/messages/deleteMessage(id=${user.id}, messageId=${message.id})}" method="post">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

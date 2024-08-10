@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Navigation Bar -->
+    <nav th:replace="~{fragments/navigation}"></nav>
+    <!-- Header -->
+    <div th:replace="~{fragments/header}"></div>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{register.title}">Register</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/images/themes/img.png') no-repeat center fixed; /* Update this path */
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column; /* Ensure elements stack vertically */
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            padding: 0.8rem;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+            border-radius: 0.75rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            border: 1px solid #ddd;
+        }
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-size: 2rem; /* Larger font size for the heading */
+            font-weight: 600; /* Semi-bold text */
+            text-transform: uppercase; /* Uppercase text */
+            letter-spacing: 1px; /* Letter spacing for readability */
+        }
+
+        .container label {
+            font-weight: 500; /* Slightly bolder labels */
+            color: #555; /* Darker text for better contrast */
+        }
+
+        .container .form-control {
+            border-radius: 0.25rem;
+            border-color: #ced4da; /* Lighter border color */
+            padding: 0.75rem; /* Increased padding for better touch targets */
+            font-size: 1rem; /* Font size for input fields */
+            transition: border-color 0.3s; /* Smooth transition on focus */
+        }
+
+        .container .form-control:focus {
+            border-color: #007bff; /* Highlight border on focus */
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25); /* Focus shadow */
+        }
+
+        .container .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 0.25rem;
+            font-size: 1.25rem; /* Larger button text */
+            font-weight: 500; /* Semi-bold button text */
+        }
+
+        .container .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .alert-danger {
+            color: #dc3545;
+            font-size: 0.875rem; /* Slightly smaller font size for alert text */
+        }
+
+        .form-group {
+            margin-bottom: 1rem; /* Increased margin for form groups */
+        }
+
+        nav, .header {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2 th:text="#{register.title}">Register</h2>
+    <form th:action="@{/users/register}" th:method="POST" th:object="${userRegistrationDTO}">
+        <div class="form-group">
+            <label for="firstName" th:text="#{register.firstName}">First Name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" th:field ="*{firstName}">
+            <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger" style="font-size: 15px" th:text="#{register.error.firstName}">First name error message</small>
+        </div>
+
+        <div class="form-group">
+            <label for="lastName" th:text="#{register.lastName}">Last Name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" th:field ="*{lastName}">
+            <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger" style="font-size: 15px" th:text="#{register.error.lastName}">Last name error message</small>
+        </div>
+
+        <div class="form-group">
+            <label for="companyName" th:text="#{register.companyName}">Company Name</label>
+            <input type="text" class="form-control" id="companyName" name="companyName" th:field ="*{companyName}">
+            <small th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}" class="text-danger" style="font-size: 15px" th:text="#{register.error.companyName}">Company name error message</small>
+        </div>
+
+        <div class="form-group">
+            <label for="email" th:text="#{register.email}">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" th:field ="*{email}">
+            <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger" style="font-size: 15px" th:text="#{register.error.email}">Email error message</small>
+        </div>
+
+        <div class="form-group">
+            <label for="password" th:text="#{register.password}">Password</label>
+            <input type="password" class="form-control" id="password" name="password" th:field ="*{password}">
+            <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger" style="font-size: 15px" th:text="#{register.error.password}">Password error message</small>
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword" th:text="#{register.confirmPassword}">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" th:field ="*{confirmPassword}">
+            <small th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger" style="font-size: 15px" th:text="#{register.error.confirmPassword}">Confirm password error message</small>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" th:text="#{register.submit}">Register</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
