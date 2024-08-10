@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Switcher Header</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 1000;
+            background-color: transparent;
+        }
+
+        .language-switcher a {
+            color: #fff; /* White text color */
+            text-decoration: none;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .language-switcher a:hover{
+        text-decoration: none;
+        }
+
+        .language-switcher a.active {
+            font-weight: bold; /* Highlight the active language */
+        }
+    </style>
+</head>
+<body>
+<div class="language-switcher">
+    <a href="?lang=en" class="text-white">English</a>
+    <a href="?lang=bg" class="text-white">Български</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
