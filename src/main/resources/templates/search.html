@@ -12,171 +12,23 @@
     <title th:text="#{search.title}">Search</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: url('/images/themes/img.png') no-repeat center fixed;
-            background-size: cover;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 2rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-            max-width: 1200px;
-            margin: 2rem auto;
-        }
-
-        .form-inline {
-            justify-content: center;
-        }
-
-        .form-inline .form-control,
-        .form-inline .btn {
-            margin-right: 0.5rem;
-        }
-
-        .form-inline .form-control {
-            height: 50px;
-            padding: 0.75rem 1.25rem;
-            font-size: 1.25rem;
-            border-radius: 0.25rem;
-        }
-
-        .form-inline .form-control::placeholder {
-            color: #6c757d;
-        }
-
-        .form-inline .btn {
-            height: 55px;
-            padding: 0.75rem 1.25rem;
-            font-size: 1.25rem;
-            font-weight: 500;
-            background-color: #17a2b8;
-            border-color: #17a2b8;
-            color: white;
-        }
-
-        .form-inline .btn:hover {
-            background-color: #138496;
-            border-color: #117a8b;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            text-align: center;
-        }
-
-        .table {
-            display: inline-table;
-            margin: 0 auto;
-        }
-
-        .table th, .table td {
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .table th {
-            background-color: #17a2b8;
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .table tbody tr:hover {
-            background-color: #e9ecef;
-        }
-
-        .table .btn {
-            border-radius: 0.25rem;
-        }
-
-        .table .btn-primary {
-            background-color: #17a2b8;
-            border: none;
-        }
-
-        .table .btn-primary:hover {
-            background-color: #138496;
-        }
-
-        .table .btn-outline-success {
-            border: 1px solid #17a2b8;
-            color: #fff;
-            background-color: #17a2b8;
-        }
-
-        .table .btn-outline-success:hover {
-            background-color: #138496;
-            color: white;
-        }
-
-        .avatar-img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-        }
-
-        .modal-dialog {
-            max-width: 800px;
-        }
-
-        .modal-header {
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .modal-footer {
-            border-top: 1px solid #dee2e6;
-        }
-
-        .btn-outline-success {
-            border-radius: 0.25rem;
-            font-weight: 400;
-        }
-
-        .modal-body p.short-description {
-            max-height: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .modal-title,
-        .modal-body p,
-        .modal-footer a,
-        .modal-footer button {
-            color: #333;
-            font-size: 1rem;
-            font-weight: 400;
-            text-transform: none;
-            letter-spacing: 0.5px;
-            line-height: 1.6;
-        }
-    </style>
 </head>
 
-<body>
-<div class="container mt-5">
-    <form class="form-inline mb-4" th:method="GET" th:action="@{/search}">
-        <input class="form-control mr-sm-2" type="search" name="query" th:placeholder="#{search.placeholder}" aria-label="Search"
-               th:value="${query}">
-        <select class="form-control mr-sm-2" name="category">
+<body class="bg-dark text-light">
+<div class="container mt-5 bg-light p-4 rounded shadow-sm" style="max-width: 1200px;">
+    <form class="form-inline mb-4 justify-content-center" th:method="GET" th:action="@{/search}">
+        <input class="form-control mr-2" type="search" name="query" th:placeholder="#{search.placeholder}" aria-label="Search" th:value="${query}" style="height: 50px; font-size: 1.25rem;">
+        <select class="form-control mr-2" name="category" style="height: 50px; font-size: 1.25rem;">
             <option value="" selected>Select Category</option>
             <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.category}"></option>
         </select>
-        <button class="btn btn-primary my-2 my-sm-0" type="submit" th:text="#{search.button}">Search</button>
+        <button class="btn btn-primary" type="submit" th:text="#{search.button}" style="height: 50px; font-size: 1.25rem;">Search</button>
     </form>
 
-    <div class="table-container">
-        <table class="table table-bordered table-striped table-responsive">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped text-center">
             <thead>
-            <tr>
+            <tr class="bg-primary text-white">
                 <th th:text="#{table.avatar}">Avatar</th>
                 <th th:text="#{table.companyName}">Company Name</th>
                 <th th:text="#{table.fullName}">Full Name</th>
@@ -188,12 +40,12 @@
             <tr th:each="user : ${users}">
                 <td>
                     <img th:src="${user.avatarImage != null ? user.avatarImage.filePath : '/images/defaultAvatar/defaultAvatarImage.png'}"
-                         alt="User Avatar" class="avatar-img rounded-circle">
+                         alt="User Avatar" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
                 </td>
                 <td th:text="${user.companyName}">Acme Corp</td>
                 <td th:text="${user.firstName + ' ' + user.lastName}">John Doe</td>
                 <td>
-                    <a th:href="@{/profile/{id}/contactForm(id=${user.id})}" class="btn btn-outline-success" th:text="#{table.contact}">Contact</a>
+                    <a th:href="@{/profile/{id}/contactForm(id=${user.id})}" class="btn btn-primary" th:text="#{table.contact}">Contact</a>
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary" data-toggle="modal" th:data-target="'#userModal' + ${user.id}" th:text="#{table.profile}">View Details</button>
@@ -217,10 +69,10 @@
                 </div>
                 <div class="modal-body text-center">
                     <img th:src="${user.avatarImage != null ? user.avatarImage.filePath : '/images/defaultAvatar/defaultAvatarImage.png'}"
-                         alt="User Avatar" class="avatar-img rounded-circle mb-3">
+                         alt="User Avatar" class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover;">
                     <p><strong th:text="#{modal.company}">Company:</strong> <span th:text="${user.companyName}">Acme Corp</span></p>
                     <p><strong th:text="#{modal.description}">Description:</strong></p>
-                    <p class="short-description" th:text="${user.description}">Brief description of the user profile.</p>
+                    <p class="text-muted" th:text="${user.description}">Brief description of the user profile.</p>
                 </div>
                 <div class="modal-footer">
                     <a th:href="@{/profile/{id}(id=${user.id})}" class="btn btn-primary" th:text="#{modal.viewFullProfile}">View Full Profile</a>
@@ -230,7 +82,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

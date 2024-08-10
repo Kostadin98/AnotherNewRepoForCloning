@@ -16,7 +16,6 @@
             background-repeat: no-repeat;
             font-family: Arial, sans-serif;
             color: #333;
-            position: relative;
         }
         .home-button {
             position: absolute;
@@ -32,14 +31,11 @@
             font-size: 16px;
         }
         .home-button:hover {
-            color: #fff;
-            text-decoration: none;
             background-color: #0056b3;
         }
         .profile-container {
-            margin-top: 50px;
+            margin-top: 70px;
         }
-
         .profile-card {
             position: relative;
             padding: 40px;
@@ -88,18 +84,38 @@
             border: 5px solid #007bff;
             margin-bottom: 20px;
         }
-
-        .profile-card .email {
+        .description-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
-            font-size: 18px;
-            color: #495057;
         }
-        .profile-card .description {
+        .qr-code {
+            width: 300px;
+            height: 300px;
+            border: 3px solid #fff;
+            border-radius: 10px;
             margin-top: 20px;
-            font-size: 16px;
-            color: #6c757d;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
-        .comment-section {
+        .qr-code:hover {
+            transform: scale(1.1);
+        }
+        .upload-form {
+            display: none;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .modal-content img {
+            width: 100%;
+            height: auto;
+        }
+         .comment-section {
             margin-top: 30px;
         }
         .comment-section h3 {
@@ -140,98 +156,7 @@
         .comment-form label[for="commentAuthor"] {
              color: #fff;
         }
-        /* Description CSS style */
-        .description-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-        .description-container h3 {
-            font-size: 1.5rem;
-            color: #333;
-        }
-        .description-container p {
-            font-size: 1rem;
-            color: #666;
-        }
-        .description-container .form-group {
-            margin-top: 20px;
-        }
-        .edit-description-form {
-            display: none;
-        }
 
-        .qr-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .qr-code {
-            width: 300px;
-            height: 300px;
-            border: 3px solid #fff;
-            border-radius: 10px;
-            margin-top: 20px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .qr-code:hover {
-            transform: scale(1.1);
-        }
-        .upload-form {
-            display: none;
-        }
-
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .download-btn {
-            margin-top: 20px;
-        }
-        .upload-new-avatar{
-        background-color: #007bff;
-        color: #fff;
-        padding: 5px 10px;
-        border-radius: 5px;
-        border: none;
-        }
-        .upload-new-avatar:hover{
-         background-color: #0056b3;
-        }
     </style>
 </head>
 <body>
@@ -267,7 +192,7 @@
                      alt="Avatar"
                      class="avatar mx-auto d-block">
 
-                <button th:if="${isProfileOwner}" id="showUploadFormBtn" class="upload-new-avatar"
+                <button th:if="${isProfileOwner}" id="showUploadFormBtn" class="btn btn-primary"
                         onclick="toggleUploadForm()">Upload New Avatar</button>
 
                 <div class="upload-form mt-3" sec:authorize="isAuthenticated()">
@@ -309,11 +234,11 @@
                         </div>
                     </section>
                 </div>
-                <div class="col-md-4 qr-container">
+                <div class="col-md-4 d-flex justify-content-center align-items-center mt-3">
                     <!-- QR Code visualization -->
                     <img th:src="@{${user.qrCodePath != null ? user.qrCodePath : '/images/default-qr-codes/default-qr.png'}}"
                          alt="QR Code"
-                         class="qr-code mx-auto d-block"
+                         class="qr-code"
                          onclick="showModal()">
                 </div>
             </div>
@@ -321,17 +246,18 @@
             <!-- Comments Section -->
             <div class="comment-section mt-5">
                 <h3>Comments</h3>
-                <div th:each="comment : ${comments}" class="comment">
-                    <div class="comment-header">
-                        <strong th:text="${comment.author}">Author</strong>
-                        <span class="comment-date" th:text="${comment.createdDate}">Date</span>
+                <div th:each="comment : ${comments}" class="card comment mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <strong th:text="${comment.author}">Author</strong>
+                            <span class="text-muted" th:text="${comment.createdDate}">Date</span>
+                        </div>
+                        <p th:text="${comment.content}">Comment content goes here...</p>
+                        <form th:action="@{/profile/{id}/deleteComment(id=${user.id})}" method="post" class="d-inline">
+                            <input type="hidden" name="commentId" th:value="${comment.id}"/>
+                            <button th:if="${isProfileOwner}" type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
                     </div>
-                    <div class="comment-content" th:text="${comment.content}">Comment content goes here...</div>
-                    <form th:action="@{/profile/{id}/deleteComment(id=${user.id})}" method="post"
-                          style="display:inline;">
-                        <input type="hidden" name="commentId" th:value="${comment.id}"/>
-                        <button th:if="${isProfileOwner}" type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
                 </div>
 
                 <!-- Comment Form -->
@@ -357,11 +283,22 @@
 </div>
 
 <!-- Modal for QR Code -->
-<div id="qrModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="hideModal()">&times;</span>
-        <img id="qrModalImage" src="" alt="QR Code" style="width: 100%; height: auto;">
-        <a id="downloadBtn" class="btn btn-primary download-btn" download>Download</a>
+<div id="qrModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="qrModalImage" src="" alt="QR Code" style="width: 100%; height: auto;">
+            </div>
+            <div class="modal-footer">
+                <a id="downloadBtn" class="btn btn-primary" download>Download</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -389,20 +326,15 @@
     });
 
     function showModal() {
-        var modal = document.getElementById("qrModal");
+        var modal = $('#qrModal');
         var modalImg = document.getElementById("qrModalImage");
         var qrCode = document.querySelector(".qr-code");
         var downloadBtn = document.getElementById("downloadBtn");
 
-        modal.style.display = "block";
+        modal.modal('show');
         modalImg.src = qrCode.src;
         downloadBtn.href = qrCode.src;
         downloadBtn.download = "QRCode.png";  // Set a default filename for the download
-    }
-
-    function hideModal() {
-        var modal = document.getElementById("qrModal");
-        modal.style.display = "none";
     }
 </script>
 
