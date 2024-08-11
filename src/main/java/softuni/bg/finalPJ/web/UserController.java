@@ -99,16 +99,19 @@ public class UserController {
     }
 
     @GetMapping("/profile/{id}/gallery")
-    public ModelAndView viewGallery(@PathVariable("id") Long id, Principal principal) {
+    public ModelAndView viewGallery(@PathVariable("id") Long id, Authentication authentication) {
         UserEntity user = userService.findById(id);
         if (user == null) {
             return new ModelAndView("error/404"); // User Not Found
         }
 
+        boolean isProfileOwner = authentication != null && authentication.getName().equals(user.getEmail());
+
         List<Image> images = imageService.findImagesByUserId(id);
         ModelAndView modelAndView = new ModelAndView("gallery");
         modelAndView.addObject("user", user);
         modelAndView.addObject("images", images);
+        modelAndView.addObject("isProfileOwner", isProfileOwner);
         return modelAndView;
     }
 
