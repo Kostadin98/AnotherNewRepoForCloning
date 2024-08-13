@@ -29,7 +29,12 @@ spring:
   default.admin.pass: 'topsecret'
   remember.me.key: 'topsecret'
 
-logging:
+
+  task:
+    scheduling:
+      time-zone=America/New_York:
+
+      logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
@@ -42,3 +47,4 @@ logging:
 #      base: ./images
 #      avatars: ./images/avatars
 #      qr-codes: ./images/qr-codes
+
