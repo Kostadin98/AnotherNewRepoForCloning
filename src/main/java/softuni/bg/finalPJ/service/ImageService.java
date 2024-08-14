@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ImageService {
 
-     void saveImage(MultipartFile file, Long userId) throws IOException;
+     void saveImage(MultipartFile file, Long userId);
 
-     void saveAvatarImage(MultipartFile file, Long userId) throws IOException;
+     void saveAvatarImage(MultipartFile file, Long userId);
 
      List<Image> findImagesByUserId(Long id);
 }

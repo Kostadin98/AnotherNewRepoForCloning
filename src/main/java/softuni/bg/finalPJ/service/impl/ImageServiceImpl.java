@@ -7,8 +7,8 @@ import softuni.bg.finalPJ.models.entities.Image;
 import softuni.bg.finalPJ.models.entities.UserEntity;
 import softuni.bg.finalPJ.repositories.AvatarImageRepository;
 import softuni.bg.finalPJ.repositories.ImageRepository;
-import softuni.bg.finalPJ.repositories.UserRepository;
 import softuni.bg.finalPJ.service.ImageService;
+import softuni.bg.finalPJ.service.UserService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,15 +21,17 @@ public class ImageServiceImpl implements ImageService {
 
     private final String SAVE_DIRECTORY_ROUTE_IMAGES = "src/main/resources/static/images/";
     private final String SAVE_DIRECTORY_ROUTE_AVATARS = "src/main/resources/static/images/avatars/";
-    private final UserRepository userRepository;
     private final ImageRepository imageRepository;
     private final AvatarImageRepository avatarImageRepository;
+    private final UserService userService;
 
     @Autowired
-    public ImageServiceImpl(UserRepository userRepository, ImageRepository imageRepository, AvatarImageRepository avatarImageRepository) {
-        this.userRepository = userRepository;
+    public ImageServiceImpl(ImageRepository imageRepository,
+                            AvatarImageRepository avatarImageRepository,
+                            UserService userService) {
         this.imageRepository = imageRepository;
         this.avatarImageRepository = avatarImageRepository;
+        this.userService = userService;
     }
 
 
@@ -40,59 +42,64 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public void saveImage(MultipartFile file, Long userId) throws IOException {
-        UserEntity user = userRepository.findById(userId).get();
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
+    public void saveImage(MultipartFile file, Long userId)  {
+        UserEntity user = userService.findById(userId);
+        Image image = new Image();
+
+        try{
+            String userDirectory = SAVE_DIRECTORY_ROUTE_IMAGES + "user_" + userId + "/";
+            Files.createDirectories(Paths.get(userDirectory));
+
+            String fileName = file.getOriginalFilename();
+            Path filePath = Paths.get(userDirectory + fileName);
+            Files.write(filePath, file.getBytes());
+
+            image.setFileName(fileName);
+
+            //Correct Path to set
+            String correctPath = userDirectory + fileName;
+            correctPath = correctPath.replace("src/main/resources/static","");
+            filePath = Paths.get(correctPath);
+            image.setFilePath(filePath.toString());
+        }catch (IOException ex){
+            throw new RuntimeException("Image cannot be saved.");
         }
 
-        String userDirectory = SAVE_DIRECTORY_ROUTE_IMAGES + "user_" + userId + "/";
-        Files.createDirectories(Paths.get(userDirectory));
-
-        String fileName = file.getOriginalFilename();
-        Path filePath = Paths.get(userDirectory + fileName);
-        Files.write(filePath, file.getBytes());
-
-
-        Image image = new Image();
-        image.setFileName(fileName);
-
-        //Correct Path to set
-        String correctPath = userDirectory + fileName;
-        correctPath = correctPath.replace("src/main/resources/static","");
-        filePath = Paths.get(correctPath);
-        image.setFilePath(filePath.toString());
 
         image.setFileType(file.getContentType());
         image.setUser(user);
+
 
         imageRepository.save(image);
     }
 
     @Override
-    public void saveAvatarImage(MultipartFile file, Long userId) throws IOException {
-        UserEntity user = userRepository.findById(userId).get();
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
+    public void saveAvatarImage(MultipartFile file, Long userId) {
 
-        String userDirectory = SAVE_DIRECTORY_ROUTE_AVATARS + "user_" + userId + "/";
-        Files.createDirectories(Paths.get(userDirectory));
-
-
-        String fileName = file.getOriginalFilename();
-        Path filePath = Paths.get(userDirectory + fileName);
-        Files.write(filePath, file.getBytes());
-
-
+        UserEntity user = userService.findById(userId);
         Image avatarImage = new Image();
-        avatarImage.setFileName(fileName);
 
-        //Correct Path to set
-        String correctPath = userDirectory + fileName;
-        correctPath = correctPath.replace("src/main/resources/static","");
-        filePath = Paths.get(correctPath);
-        avatarImage.setFilePath(filePath.toString());
+        try {
+            String userDirectory = SAVE_DIRECTORY_ROUTE_AVATARS + "user_" + userId + "/";
+            Files.createDirectories(Paths.get(userDirectory));
+
+
+            String fileName = file.getOriginalFilename();
+            Path filePath = Paths.get(userDirectory + fileName);
+            Files.write(filePath, file.getBytes());
+
+
+            avatarImage.setFileName(fileName);
+
+            //Correct Path to set
+            String correctPath = userDirectory + fileName;
+            correctPath = correctPath.replace("src/main/resources/static","");
+            filePath = Paths.get(correctPath);
+            avatarImage.setFilePath(filePath.toString());
+
+        }catch (IOException ex){
+            throw new RuntimeException("Avatar cannot be saved");
+        }
 
         avatarImage.setFileType(file.getContentType());
         avatarImage.setUser(user);
@@ -100,6 +107,6 @@ public class ImageServiceImpl implements ImageService {
         avatarImageRepository.save(avatarImage);
 
         user.setAvatarImage(avatarImage);
-        userRepository.save(user);
+        userService.save(user);
     }
 }

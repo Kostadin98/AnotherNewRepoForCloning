@@ -3,7 +3,6 @@ package softuni.bg.finalPJ.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,16 +52,12 @@ public class MessageController {
     }
 
     @GetMapping("/profile/{id}/messages/inbox")
-    @Secured("ROLE_USER")
     public ModelAndView showInbox(@PathVariable Long id,
                                   Principal principal) {
 
 
         UserEntity user = userService.findById(id);
 
-        if (!user.getEmail().equals(principal.getName())) {
-            throw new AccessDeniedException("You are not authorized to view this page");
-        }
 
         ModelAndView modelAndView = new ModelAndView("inbox");
         modelAndView.addObject("messages", messageService.getMessagesForUser(id));
@@ -70,7 +65,6 @@ public class MessageController {
         return modelAndView;
     }
 
-    @Secured("ROLE_USER")
     @PostMapping("/profile/{id}/messages/deleteMessage")
     public ModelAndView deleteMessage(@PathVariable Long id,
                                       @RequestParam Long messageId){

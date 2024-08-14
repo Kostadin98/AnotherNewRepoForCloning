@@ -33,15 +33,6 @@ public class HomeController {
 
         List<UserEntity> users = userService.searchUsers(query, categoryId);
 
-
-//        if (query != null && !query.isEmpty()) {
-//            users = userService.searchUsers(query, categoryId);
-//        } else if(categoryId != null) {
-//            users = userService.searchUsers(query, categoryId);
-//        }else {
-//            users = userService.findAllUsers();
-//        }
-
         ModelAndView modelAndView = new ModelAndView("search");
         modelAndView.addObject("users", users);
         modelAndView.addObject("query", query);

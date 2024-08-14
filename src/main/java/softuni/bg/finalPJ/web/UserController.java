@@ -111,12 +111,10 @@ public class UserController {
 
     @GetMapping("/profile/{id}/gallery")
     public ModelAndView viewGallery(@PathVariable("id") Long id, Authentication authentication) {
-        UserEntity user = userService.findById(id);
-        if (user == null) {
-            return new ModelAndView("error/404"); // User Not Found
-        }
 
-        boolean isProfileOwner = authentication != null && authentication.getName().equals(user.getEmail());
+        UserEntity user = userService.findById(id);
+
+        boolean isProfileOwner = userService.isProfileOwner(authentication, user);
 
         List<Image> images = imageService.findImagesByUserId(id);
         ModelAndView modelAndView = new ModelAndView("gallery");
@@ -132,16 +130,8 @@ public class UserController {
                                     Principal principal) {
 
         UserEntity user = userService.findById(id);
-        if (user == null || !user.getEmail().equals(principal.getName())) {
-            return new ModelAndView("error/403");
-        }
 
-        try {
-            imageService.saveImage(file, id);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ModelAndView("error/500");
-        }
+        imageService.saveImage(file, id);
 
         return new ModelAndView("redirect:/profile/" + id + "/gallery");
     }
@@ -152,16 +142,9 @@ public class UserController {
                                     Principal principal) {
 
         UserEntity user = userService.findById(id);
-        if (user == null || !user.getEmail().equals(principal.getName())) {
-            return new ModelAndView("error/403");
-        }
 
-        try {
-            imageService.saveAvatarImage(file, id);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ModelAndView("error/500");
-        }
+        imageService.saveAvatarImage(file, id);
+
 
         return new ModelAndView("redirect:/profile/" + id);
     }

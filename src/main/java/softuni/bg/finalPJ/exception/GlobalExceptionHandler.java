@@ -9,14 +9,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ModelAndView handleRuntimeException(RuntimeException ex) {
-        ModelAndView mav = new ModelAndView("error");  // The name of the error page template
+        ModelAndView mav = new ModelAndView("errors/error");  // The name of the error page template
         mav.addObject("errorMessage", ex.getMessage());
         return mav;
     }
 
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception ex) {
-        ModelAndView mav = new ModelAndView("error");  // The name of the error page template
+        ModelAndView mav = new ModelAndView("errors/error");  // The name of the error page template
         mav.addObject("errorMessage", "An unexpected error occurred. Please try again later.");
         return mav;
     }
