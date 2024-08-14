@@ -63,5 +63,17 @@ public class CommentServiceImpl implements CommentService {
         return formattedDate;
     }
 
+    @Override
+    public String getAuthorName(UserEntity currentUser, String author) {
+
+        if (currentUser != null) {
+            author = currentUser.fullName();
+        } else if (author == null || author.isEmpty()) {
+            author = "Anonymous";
+        }
+
+        return author;
+    }
+
 
 }

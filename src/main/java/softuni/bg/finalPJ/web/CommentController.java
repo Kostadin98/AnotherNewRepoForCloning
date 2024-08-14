@@ -33,20 +33,9 @@ public class CommentController {
         UserEntity profileOwner = userService.findById(id);
         UserEntity currentUser = principal != null ? userService.findUserByEmail(principal.getName()) : null;
 
-        if (currentUser != null && currentUser.getId().equals(id)) {
-            ModelAndView modelAndView = new ModelAndView("redirect:/profile/" + id);
-            modelAndView.addObject("error", "CannotCommentOnOwnProfile");
-            return modelAndView;
-        }
 
-        if (currentUser != null) {
-            author = currentUser.fullName();
-        } else if (author == null || author.isEmpty()) {
-            author = "Anonymous";
-        }
-
-
-        commentService.addComment(profileOwner, author, content);
+        String authorName = commentService.getAuthorName(currentUser, author);
+        commentService.addComment(profileOwner, authorName, content);
 
 
         return new ModelAndView("redirect:/profile/" + id);

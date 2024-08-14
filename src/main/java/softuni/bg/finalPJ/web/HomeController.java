@@ -30,14 +30,17 @@ public class HomeController {
     @GetMapping("/search")
     public ModelAndView listUsers(@RequestParam(value = "query", required = false) String query,
                                   @RequestParam(value = "category", required = false) Long categoryId) {
-        List<UserEntity> users;
-        if (query != null && !query.isEmpty()) {
-            users = userService.searchUsers(query, categoryId);
-        } else if(categoryId != null) {
-            users = userService.searchUsers(query, categoryId);
-        }else {
-            users = userService.findAllUsers();
-        }
+
+        List<UserEntity> users = userService.searchUsers(query, categoryId);
+
+
+//        if (query != null && !query.isEmpty()) {
+//            users = userService.searchUsers(query, categoryId);
+//        } else if(categoryId != null) {
+//            users = userService.searchUsers(query, categoryId);
+//        }else {
+//            users = userService.findAllUsers();
+//        }
 
         ModelAndView modelAndView = new ModelAndView("search");
         modelAndView.addObject("users", users);

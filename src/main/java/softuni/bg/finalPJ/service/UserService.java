@@ -17,6 +17,7 @@ public interface UserService {
 
     List<UserEntity> searchUsers(String query,  Long categoryId);
 
+
     List<UserEntity> findAllUsers();
 
     UserEntity findById(Long id);

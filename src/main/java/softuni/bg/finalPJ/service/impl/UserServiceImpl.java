@@ -67,11 +67,14 @@ public class UserServiceImpl implements UserService {
     // Logic for "search" page
     @Override
     public List<UserEntity> searchUsers(String query, Long categoryId) {
-        if (categoryId != null) {
-            return userRepository.findByCategoriesId(categoryId);
-        } else {
+
+        if (query != null && !query.isEmpty()){
             return userRepository.findByCompanyNameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
                     query, query, query, query);
+        } else if (categoryId != null) {
+            return userRepository.findByCategoriesId(categoryId);
+        } else {
+            return userRepository.findAll();
         }
     }
 

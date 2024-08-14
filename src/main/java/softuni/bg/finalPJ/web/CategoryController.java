@@ -30,9 +30,7 @@ public class CategoryController {
         UserEntity user = userService.findById(id);
         List<Category> allCategories = categoryService.findAll();
 
-        if (!user.getEmail().equals(authentication.getName())) {
-            throw new SecurityException("You cannot manage categories for another user");
-        }
+
 
         ModelAndView modelAndView = new ModelAndView("manageCategories");
         modelAndView.addObject("user", user);
@@ -47,9 +45,6 @@ public class CategoryController {
                               Authentication authentication) {
         UserEntity user = userService.findById(id);
 
-        if (!user.getEmail().equals(authentication.getName())) {
-            throw new SecurityException("You cannot modify another user's categories");
-        }
 
         Category category = categoryService.findById(categoryId);
         user.getCategories().add(category);
@@ -62,11 +57,8 @@ public class CategoryController {
     public ModelAndView removeCategory(@PathVariable("id") Long id,
                                        @RequestParam("categoryId") Long categoryId,
                                  Authentication authentication) {
-        UserEntity user = userService.findById(id);
 
-        if (!user.getEmail().equals(authentication.getName())) {
-            throw new SecurityException("You cannot modify another user's categories");
-        }
+        UserEntity user = userService.findById(id);
 
         Category category = categoryService.findById(categoryId);
 

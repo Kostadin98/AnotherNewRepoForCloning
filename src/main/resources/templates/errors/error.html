@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">Error</h4>
+        <p th:text="${errorMessage}">An unexpected error occurred. Please try again later.</p>
+        <hr>
+        <a href="/" class="btn btn-primary">Go to Home</a>
+    </div>
+</div>
+</body>
+</html>

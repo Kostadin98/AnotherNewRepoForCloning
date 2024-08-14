@@ -18,4 +18,6 @@ public interface CommentService {
     Comment findById (Long commentId);
 
     String formatDate(LocalDateTime localDateTime);
+
+    String getAuthorName(UserEntity currentUser, String author);
 }
