@@ -13,10 +13,10 @@ import org.springframework.web.servlet.ModelAndView;
 import softuni.bg.finalPJ.models.entities.Comment;
 import softuni.bg.finalPJ.models.entities.Image;
 import softuni.bg.finalPJ.models.entities.UserEntity;
-import softuni.bg.finalPJ.service.CommentService;
-import softuni.bg.finalPJ.service.ImageService;
-import softuni.bg.finalPJ.service.QrCodeService;
-import softuni.bg.finalPJ.service.UserService;
+import softuni.bg.finalPJ.models.entities.UserRoleEntity;
+import softuni.bg.finalPJ.models.enums.UserRoleEnum;
+import softuni.bg.finalPJ.service.*;
+import softuni.bg.finalPJ.service.impl.UserRoleServiceImpl;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -29,14 +29,21 @@ public class UserController {
     private final ImageService imageService;
     private final QrCodeService qrCodeService;
     private final CommentService commentService;
+    private final UserRoleService userRoleService;
+
 
 
     @Autowired
-    public UserController(UserService userService, ImageService imageService, QrCodeService qrCodeService, CommentService commentService) {
+    public UserController(UserService userService,
+                          ImageService imageService,
+                          QrCodeService qrCodeService,
+                          CommentService commentService,
+                          UserRoleService userRoleService) {
         this.userService = userService;
         this.imageService = imageService;
         this.qrCodeService = qrCodeService;
         this.commentService = commentService;
+        this.userRoleService = userRoleService;
     }
 
 
@@ -56,7 +63,9 @@ public class UserController {
         modelAndView.addObject("user", user);
 
         // Add a flag to determine if the logged-in user is the profile owner
-        boolean isProfileOwner = authentication != null && authentication.getName().equals(user.getEmail());
+        boolean isProfileOwner = userService.isProfileOwner(authentication, user);
+        boolean isAdmin = userService.isAdmin(user.getId());
+        modelAndView.addObject("isAdmin", isAdmin);
         modelAndView.addObject("isProfileOwner", isProfileOwner);
         return modelAndView;
     }
@@ -76,7 +85,9 @@ public class UserController {
         modelAndView.addObject("comments", comments);
         modelAndView.addObject("user", user);
 
-        boolean isProfileOwner = authentication != null && authentication.getName().equals(user.getEmail());
+        boolean isProfileOwner = userService.isProfileOwner(authentication, user);
+        boolean isAdmin = userService.isAdmin(id);
+        modelAndView.addObject("isAdmin", isAdmin);
         modelAndView.addObject("isProfileOwner", isProfileOwner);
 
         return modelAndView;
@@ -166,6 +177,19 @@ public class UserController {
         }
 
         user.setDescription(description);
+        userService.save(user);
+
+        return new ModelAndView("redirect:/profile/" + id);
+    }
+
+    @PostMapping("/profile/{id}/setAdmin")
+    public ModelAndView setAdmin(@PathVariable("id") Long id){
+
+        UserEntity user = userService.findById(id);
+        List<UserRoleEntity> roles = userRoleService.findAll();
+        user.setRoles(roles);
+
+//        user.addRole(new UserRoleEntity().setRole(UserRoleEnum.ADMIN));
         userService.save(user);
 
         return new ModelAndView("redirect:/profile/" + id);

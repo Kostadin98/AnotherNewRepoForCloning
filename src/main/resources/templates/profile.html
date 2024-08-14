@@ -214,6 +214,16 @@
                 </div>
             </div>
 
+            <form th:if="${!isAdmin}"
+                  sec:authorize="hasRole('ADMIN')"
+                  th:action="@{/profile/{id}/setAdmin(id=${user.id})}"
+                  method="POST">
+
+                <!-- Include user ID as a hidden field -->
+                <input type="hidden" name="userId" th:value="${user.id}"/>
+                <button type="submit" class="btn btn-warning mt-3">Set To Admin</button>
+            </form>
+
             <div class="row mt-4">
                 <div class="col-md-8">
                     <!-- Description section -->

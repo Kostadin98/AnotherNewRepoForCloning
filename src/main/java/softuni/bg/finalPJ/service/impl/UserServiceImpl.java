@@ -1,6 +1,7 @@
 package softuni.bg.finalPJ.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -134,5 +135,21 @@ public class UserServiceImpl implements UserService {
 
         return password.equals(confirmPassword);
     }
+
+    @Override
+    public boolean isAdmin(Long userId) {
+
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("not found"));
+        boolean isAdmin = user.getRoles().stream()
+                .anyMatch(role -> UserRoleEnum.ADMIN.equals(role.getRole()));
+
+        return isAdmin;
+    }
+
+    @Override
+    public boolean isProfileOwner(Authentication authentication, UserEntity user) {
+        return authentication != null && authentication.getName().equals(user.getEmail());
+    }
+
 
 }

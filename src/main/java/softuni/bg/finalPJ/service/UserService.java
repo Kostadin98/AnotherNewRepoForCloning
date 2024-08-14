@@ -1,7 +1,9 @@
 package softuni.bg.finalPJ.service;
 
+import org.springframework.security.core.Authentication;
 import softuni.bg.finalPJ.models.DTOs.UserRegistrationDTO;
 import softuni.bg.finalPJ.models.entities.UserEntity;
+import softuni.bg.finalPJ.models.entities.UserRoleEntity;
 
 import java.util.List;
 
@@ -32,4 +34,8 @@ public interface UserService {
     boolean checkIfNewAndCurrentPasswordMatches(UserEntity user, String passwordToMatch);
 
     boolean checkIfPasswordAndConfirmPasswordMatches(String password, String confirmPassword);
+
+    boolean isAdmin(Long userId);
+
+    boolean isProfileOwner(Authentication authentication, UserEntity user);
 }
