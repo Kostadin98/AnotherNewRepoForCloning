@@ -16,7 +16,6 @@ import softuni.bg.finalPJ.models.entities.UserEntity;
 import softuni.bg.finalPJ.models.entities.UserRoleEntity;
 import softuni.bg.finalPJ.models.enums.UserRoleEnum;
 import softuni.bg.finalPJ.service.*;
-import softuni.bg.finalPJ.service.impl.UserRoleServiceImpl;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -153,11 +152,9 @@ public class UserController {
     public ModelAndView updateDescription(@PathVariable("id") Long id,
                                           @RequestParam("description") String description,
                                           Authentication authentication) {
-        UserEntity user = userService.findById(id);
 
-        if (authentication == null || !authentication.getName().equals(user.getEmail())) {
-            return new ModelAndView("error/403"); // Access Denied
-        }
+        UserEntity user = userService.findById(id);
+        userService.checkIfUserIsAuthorized(user, authentication);
 
         user.setDescription(description);
         userService.save(user);
@@ -169,12 +166,10 @@ public class UserController {
     public ModelAndView setAdmin(@PathVariable("id") Long id){
 
         UserEntity user = userService.findById(id);
-        List<UserRoleEntity> roles = userRoleService.findAll();
-        user.setRoles(roles);
+        UserRoleEntity roleToSet = userRoleService.findUserRoleEntityByRole(UserRoleEnum.ADMIN);
 
-//        user.addRole(new UserRoleEntity().setRole(UserRoleEnum.ADMIN));
+        user.addRole(roleToSet);
         userService.save(user);
-
         return new ModelAndView("redirect:/profile/" + id);
     }
 }

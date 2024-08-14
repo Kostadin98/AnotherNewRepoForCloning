@@ -13,6 +13,7 @@ import softuni.bg.finalPJ.models.entities.UserRoleEntity;
 import softuni.bg.finalPJ.models.enums.UserRoleEnum;
 import softuni.bg.finalPJ.repositories.UserRepository;
 import softuni.bg.finalPJ.repositories.UserRoleRepository;
+import softuni.bg.finalPJ.service.UserRoleService;
 import softuni.bg.finalPJ.service.UserService;
 
 import java.util.List;
@@ -21,16 +22,16 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
+    private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           UserRoleRepository userRoleRepository,
+                           UserRoleService userRoleService,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.userRoleRepository = userRoleRepository;
+        this.userRoleService = userRoleService;
         this.passwordEncoder = passwordEncoder;
 
     }
@@ -50,7 +51,8 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        UserRoleEntity roleToSet = userRoleRepository.findUserRoleEntityByRole(UserRoleEnum.NORMAL).get();
+        UserRoleEntity roleToSet = userRoleService.findUserRoleEntityByRole(UserRoleEnum.NORMAL);
+
 
         UserEntity userToSave = new UserEntity();
         userToSave.setEmail(userRegistrationDTO.getEmail());
@@ -160,6 +162,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isProfileOwner(Authentication authentication, UserEntity user) {
         return authentication != null && authentication.getName().equals(user.getEmail());
+    }
+
+    @Override
+    public void checkIfUserIsAuthorized(UserEntity user, Authentication authentication) {
+        if (!user.getEmail().equals(authentication.getName())){
+            throw new RuntimeException("You are not authorize to make this changes!");
+        }
     }
 
 }

@@ -39,4 +39,6 @@ public interface UserService {
     boolean isAdmin(Long userId);
 
     boolean isProfileOwner(Authentication authentication, UserEntity user);
+
+    void checkIfUserIsAuthorized(UserEntity user, Authentication authentication);
 }
