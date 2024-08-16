@@ -10,8 +10,6 @@ import softuni.bg.finalPJ.models.entities.UserEntity;
 import softuni.bg.finalPJ.repositories.UserRepository;
 import softuni.bg.finalPJ.service.QrCodeService;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
