@@ -13,7 +13,12 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
+<style>
+    body {
+        background: url('/images/themes/img.png') no-repeat center fixed;
+        background-size: cover;
+    }
+</style>
 <body class="bg-dark text-light">
 <div class="container mt-5 bg-light p-4 rounded shadow-sm" style="max-width: 1200px;">
     <form class="form-inline mb-4 justify-content-center" th:method="GET" th:action="@{/search}">
