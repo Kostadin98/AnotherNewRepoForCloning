@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                         // Allow anyone to see home page, register page, login page
                         .requestMatchers("/", "/users/login", "/users/register",
                                 "/about", "/users/login-error", "/contact", "/profile/*", "/search"
-                        , "/profile/*/gallery", "/profile/*/contactForm", "/profile/*/submitContactForm").permitAll()
+                        , "/profile/*/gallery", "/profile/*/contactForm", "/profile/*/submitContactForm", "profile/*/addComment").permitAll()
                         //all other requests are authenticated
                         .anyRequest().authenticated())
                 .formLogin(
