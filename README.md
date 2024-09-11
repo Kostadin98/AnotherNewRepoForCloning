@@ -6,6 +6,8 @@ Virtual Business Card is a cutting-edge web application designed to revolutioniz
 ## **Features**
 
 * User Authentication: Secure sing-up, login and logout functionalities using Spring Security.
+![663657d7-8479-4c1d-8b98-e9e5aa865f80](https://github.com/user-attachments/assets/9525b91d-6e7e-40d1-ba39-1ec9cec06180)
+![471bb283-7754-40b3-8e74-1e952320645a](https://github.com/user-attachments/assets/ff29f662-2e59-4358-b3aa-ab52566743dd)
 
 
 * Homepage for not logged users:
@@ -13,7 +15,7 @@ Virtual Business Card is a cutting-edge web application designed to revolutioniz
 
 * User Profile: You can personalize your profile like this - 
 
-1. Upload/Change your avatar image
+1. Upload/Change your avatar image.
 2. Upload images in your gallery page.
 3. Write/Update your description.
 4. Application is automatically generate a QR code for your profile which is unique.
